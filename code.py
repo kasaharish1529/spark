@@ -22,8 +22,8 @@ spark = SparkSession.builder \
 spark.sparkContext.setLogLevel('ERROR')
 
 
-input_path = r"C:\Users\Harish_Kasa\Downloads\20220125_103125_00086_b9kns_bucket-00000"
-output_path = r"C:\Users\Harish_Kasa\Downloads\20220125_103125_00086_b9kns_bucket-00000"
+input_path = r"C:\Users\Harish_Kasa\Downloads\input\*"
+output_path = r"C:\Users\Harish_Kasa\Downloads\output.parquet"
 dedup_columns = ['device_id','latitude','longitude','timestamp']
 
 # .withColumn("timestamp_ms", concat_ws(".",from_unixtime(substring(col("timestamp"),0,10),"yyyy-MM-dd HH:mm:ss"),substring(col("timestamp"),-3,3)))
@@ -48,8 +48,7 @@ def to_parquet(dataframe,path):
 
 df = read_csv(input_path,getRawSchema())
 df = transform(df)
-# to_parquet(df,output_path)
-# print(dedup_count(df,dedup_columns))
+to_parquet(df,output_path)
 
 df.registerTempTable("events")
 
