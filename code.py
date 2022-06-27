@@ -14,18 +14,6 @@ def getRawSchema(includeCorruptField = True):
         schema.append(StructField("_corrupt_record", StringType(), True))
     return StructType(schema)
 
-# Create SparkSession 
-spark = SparkSession.builder \
-      .master("local[1]") \
-      .appName("SparkByExamples.com") \
-      .getOrCreate() 
-spark.sparkContext.setLogLevel('ERROR')
-
-
-input_path = r"C:\Users\Harish_Kasa\Downloads\input\*"
-output_path = r"C:\Users\Harish_Kasa\Downloads\output.parquet"
-dedup_columns = ['device_id','latitude','longitude','timestamp']
-
 # .withColumn("timestamp_ms", concat_ws(".",from_unixtime(substring(col("timestamp"),0,10),"yyyy-MM-dd HH:mm:ss"),substring(col("timestamp"),-3,3)))
 def transform(dataframe):
     dataframe = dataframe.withColumn("timestamp", from_unixtime(substring(col("timestamp"),0,10),"yyyy-MM-dd HH:mm:ss"))\
@@ -112,3 +100,18 @@ group by HA_Range having HA_Range is not null order by HA_Range) '''
 
 df1=spark.sql(sql4)
 df1.show()
+
+
+if __name__ == '__main__':
+
+    # Create SparkSession 
+    spark = SparkSession.builder \
+        .master("local[1]") \
+        .appName("SparkByExamples.com") \
+        .getOrCreate() 
+    spark.sparkContext.setLogLevel('ERROR')
+
+    input_path = r"C:\Users\Harish_Kasa\Downloads\input\*"
+    output_path = r"C:\Users\Harish_Kasa\Downloads\output.parquet"
+    dedup_columns = ['device_id','latitude','longitude','timestamp']
+
